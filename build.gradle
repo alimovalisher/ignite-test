@@ -1,0 +1,48 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'maven'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    compileJava.options.encoding = 'UTF-8'
+    compileTestJava.options.encoding = 'UTF-8'
+
+    project.group = 'com.example'
+    project.version = '0.1'
+
+    configurations {
+        all*.exclude module: 'slf4j-log4j12'
+        all*.exclude module: 'hibernate-validator'
+        all*.exclude group: 'com.codahale.metrics'
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    clean {
+        delete fileTree(dir: "${rootProject.buildDir}/libs")
+    }
+
+    jar << {
+        copy {
+            into "${rootProject.buildDir}/libs"
+            from configurations.runtime
+            from project.jar.archivePath
+        }
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.1'
+}
