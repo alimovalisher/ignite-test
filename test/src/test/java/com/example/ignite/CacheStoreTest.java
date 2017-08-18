@@ -5,6 +5,7 @@ import com.example.IgniteFactory;
 import com.example.NoOpCacheStoreImpl;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
+import org.apache.ignite.cache.CacheAtomicityMode;
 import org.apache.ignite.cache.store.CacheStore;
 import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.transactions.Transaction;
@@ -36,7 +37,9 @@ public class CacheStoreTest {
     private CacheConfiguration getNoOpCacheConfiguration() {
         CacheConfiguration cacheConfiguration = new CacheConfiguration("test.no-op");
         cacheConfiguration.setWriteThrough(true);
+        cacheConfiguration.setWriteBehindEnabled(true);
         cacheConfiguration.setCacheWriterFactory(noOpCacheWriterFactory);
+        cacheConfiguration.setAtomicityMode(CacheAtomicityMode.TRANSACTIONAL);
         cacheConfiguration.setWriteBehindBatchSize(1);
 
         return cacheConfiguration;
@@ -51,12 +54,18 @@ public class CacheStoreTest {
      * If transaction was failed than cache store must not be invoked
      */
     @Test
-    public void testTransactionFailed() {
+    public void doNotInvokeCacheStore() {
         IgniteCache cache = ignite.getOrCreateCache(noOpCacheConfiguration);
 
         try (Transaction transaction = ignite.transactions().txStart()) {
             cache.put(1, 1);
-            cache.put(2, 2);
+            cache.put(2, 2);  // will be flushed here
+//            cache.invoke(3, new CacheEntryProcessor() {
+//                @Override
+//                public Object process(MutableEntry entry, Object... arguments) throws EntryProcessorException {
+//                    throw new RuntimeException();
+//                }
+//            });
 
             transaction.rollback();
         }
