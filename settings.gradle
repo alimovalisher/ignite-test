@@ -1,4 +1,5 @@
 rootProject.name = "ignite-test"
 
-
 include "test"
+include "pcl"
+include "data-node"

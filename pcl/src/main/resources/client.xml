@@ -7,7 +7,7 @@
     <bean id="ignite.cfg" class="org.apache.ignite.configuration.IgniteConfiguration">
         <property name="peerClassLoadingEnabled" value="true"/>
 
-        <property name="clientMode" value="false"/>
+        <property name="clientMode" value="true"/>
 
         <property name="transactionConfiguration">
             <bean class="org.apache.ignite.configuration.TransactionConfiguration">

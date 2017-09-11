@@ -9,6 +9,12 @@
 
         <property name="clientMode" value="false"/>
 
+        <property name="userAttributes">
+            <map>
+                <entry key="role" value="worker"/>
+            </map>
+        </property>
+
         <property name="transactionConfiguration">
             <bean class="org.apache.ignite.configuration.TransactionConfiguration">
                 <property name="defaultTxConcurrency" value="PESSIMISTIC"/>
