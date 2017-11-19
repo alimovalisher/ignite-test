@@ -30,7 +30,7 @@ public class TestServiceImpl implements TestService {
     public void execute(ServiceContext ctx) throws Exception {
         executorService.scheduleWithFixedDelay(() -> {
             try {
-                Object result = ignite.compute(ignite.cluster().forAttribute("role", "data")).execute(new TestComputeTask(), null);
+                Object result = ignite.compute(ignite.cluster().forAttribute("role", "data")).execute(new TestComputeTask3(), null);
 
                 log.info("result: {}", result);
 

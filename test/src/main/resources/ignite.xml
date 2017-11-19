@@ -13,11 +13,84 @@
                     <property name="name" value="USERS"/>
                     <property name="backups" value="0"/>
                 </bean>
+
+                <bean class="org.apache.ignite.configuration.CacheConfiguration">
+                    <property name="name" value="USER"/>
+                    <property name="backups" value="0"/>
+                    <property name="atomicityMode" value="ATOMIC"/>
+                    <property name="cacheMode" value="PARTITIONED"/>
+                    <property name="queryEntities">
+                        <list>
+                            <bean class="org.apache.ignite.cache.QueryEntity">
+                                <constructor-arg value="java.util.UUID"/>
+                                <constructor-arg value="com.example.User"/>
+
+
+                                <property name="tableName" value="USER"/>
+                                <property name="fields">
+                                    <map>
+                                        <entry key="id" value="java.util.UUID"/>
+                                    </map>
+                                </property>
+                                <property name="indexes">
+                                    <list>
+                                        <bean class="org.apache.ignite.cache.QueryIndex">
+                                            <property name="name" value="user_idx"/>
+                                            <property name="fields">
+                                                <map>
+                                                    <entry key="id" value="true"/>
+                                                </map>
+                                            </property>
+                                            <property name="inlineSize" value="16"/>
+                                            <property name="indexType" value="SORTED"/>
+                                        </bean>
+                                    </list>
+                                </property>
+                            </bean>
+                        </list>
+                    </property>
+                </bean>
+
+                <bean class="org.apache.ignite.configuration.CacheConfiguration">
+                    <property name="name" value="USER_LOG"/>
+                    <property name="backups" value="0"/>
+                    <property name="atomicityMode" value="ATOMIC"/>
+                    <property name="cacheMode" value="PARTITIONED"/>
+
+                    <property name="queryEntities">
+                        <list>
+                            <bean class="org.apache.ignite.cache.QueryEntity">
+                                <constructor-arg value="java.util.UUID"/>
+                                <constructor-arg value="com.example.UserLog"/>
+
+                                <property name="tableName" value="USER_LOG"/>
+                                <property name="fields">
+                                    <map>
+                                        <entry key="id" value="java.util.UUID"/>
+                                        <entry key="user" value="java.util.UUID"/>
+                                    </map>
+                                </property>
+                                <property name="indexes">
+                                    <list>
+                                        <bean class="org.apache.ignite.cache.QueryIndex">
+                                            <property name="name" value="user_log_idx"/>
+                                            <property name="fields">
+                                                <map>
+                                                    <entry key="user" value="true"/>
+                                                </map>
+                                            </property>
+                                            <property name="inlineSize" value="16"/>
+                                            <property name="indexType" value="SORTED"/>
+                                        </bean>
+                                    </list>
+                                </property>
+                            </bean>
+                        </list>
+                    </property>
+                </bean>
             </list>
         </property>
-        <property name="marshaller">
-            <bean class="org.apache.ignite.internal.binary.BinaryMarshaller"/>
-        </property>
+
 
         <property name="discoverySpi">
             <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi"/>
@@ -30,6 +103,11 @@
         </property>
 
         <property name="clientMode" value="false"/>
-        <property name="gridName" value="test"/>
+
+        <property name="igniteInstanceName">
+            <bean factory-bean="id" factory-method="nextInt"/>
+        </property>
     </bean>
+
+    <bean name="id" class="java.util.Random"/>
 </beans>

@@ -19,6 +19,12 @@ subprojects {
     project.group = 'com.example'
     project.version = '0.1'
 
+    ext {
+        vers = [
+                ignite: "2.2.0"
+        ]
+    }
+
     configurations {
         all*.exclude module: 'slf4j-log4j12'
         all*.exclude module: 'hibernate-validator'

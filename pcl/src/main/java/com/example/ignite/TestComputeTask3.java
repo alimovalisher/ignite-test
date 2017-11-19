@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class TestComputeTask extends ComputeTaskAdapter<Integer, Integer> {
+public class TestComputeTask3 extends ComputeTaskAdapter<Integer, Integer> {
     @Nullable
     @Override
     public Map<? extends ComputeJob, ClusterNode> map(List<ClusterNode> subgrid, @Nullable Integer arg) throws IgniteException {
@@ -37,7 +37,7 @@ public class TestComputeTask extends ComputeTaskAdapter<Integer, Integer> {
 
         @Override
         public Object execute() throws IgniteException {
-            return 2;
+            return 3;
         }
     }
 }
